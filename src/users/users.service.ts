@@ -11,8 +11,8 @@ export class UsersService implements IUsersService {
 		// проверка, что он сущестует
 		// Если есть то возвращаем null, если нет то создаем нового пользователя
 		await newUser.setPassword(password);
-		// return newUser;
-		return null;
+		return newUser;
+		// return null;
 	}
 	async validateUser(dto: UserLoginDto): Promise<boolean> {
 		return true;
