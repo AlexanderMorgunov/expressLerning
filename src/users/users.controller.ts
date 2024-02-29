@@ -49,6 +49,7 @@ export class UsersController extends BaseController implements IUsersController 
 		this.ok(res, {
 			email: result.email,
 			name: result.name,
+			id: result.id,
 		});
 	}
 }
