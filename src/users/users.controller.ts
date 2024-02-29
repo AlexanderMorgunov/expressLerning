@@ -20,7 +20,12 @@ export class UsersController extends BaseController implements IUsersController 
 	) {
 		super(loggerService);
 		this.bindRoutes([
-			{ path: '/login', method: 'post', func: this.login },
+			{
+				path: '/login',
+				method: 'post',
+				func: this.login,
+				middlewares: [new ValidateMiddleware(UserLoginDto)],
+			},
 			{
 				path: '/register',
 				method: 'post',
@@ -30,10 +35,17 @@ export class UsersController extends BaseController implements IUsersController 
 		]);
 	}
 
-	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-		// next(new HTTPError(401, "Ошибка авторизации", "login"));
-		console.log(req.body);
-		this.ok(res, 'login');
+	async login(
+		req: Request<{}, {}, UserLoginDto>,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> {
+		const validate = await this.userService.validateUser(req.body);
+		if (!validate) {
+			return next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+		} else {
+			this.ok(res, { token: 'Здесь будет токен' });
+		}
 	}
 
 	async register(
