@@ -15,19 +15,18 @@ export class App {
 	port: number;
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
-		@inject(TYPES.UserController) private userController: UsersController,
+		@inject(TYPES.UsersController) private userController: UsersController,
 		@inject(TYPES.ExceptionFilter) private ExceptionFilter: ExceptionFilter,
 	) {
 		this.app = express();
 		this.port = 8000;
 	}
 
-	useRoutes(): void {
-		this.app.use('/users', this.userController.router);
-	}
-
 	useMiddleware(): void {
 		this.app.use(json());
+	}
+	useRoutes(): void {
+		this.app.use('/users', this.userController.router);
 	}
 
 	useExceptionFilters(): void {
